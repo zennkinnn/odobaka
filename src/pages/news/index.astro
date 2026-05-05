@@ -1,0 +1,31 @@
+---
+import Pagination from '@components/Pagination.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import UpdateList from '@components/UpdateList.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getSiteSettings, getUpdates } from '@lib/cms';
+
+const NEWS_PER_PAGE = 5;
+const site = await getSiteSettings();
+const updates = await getUpdates();
+const totalPages = Math.ceil(updates.length / NEWS_PER_PAGE);
+const pageUpdates = updates.slice(0, NEWS_PER_PAGE);
+---
+
+<BaseLayout
+  site={site}
+  title={`News | ${site.name}`}
+  description={`${site.name}の最新情報、出演予定、募集情報の一覧です。`}
+>
+  <section class="page-hero page-hero-teal">
+    <p class="eyebrow">News</p>
+    <h1>News</h1>
+    <p>最新情報、出演予定、メンバー募集のお知らせをまとめています。</p>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Updates" title="最新情報一覧" />
+    <UpdateList updates={pageUpdates} />
+    <Pagination currentPage={1} totalPages={totalPages} />
+  </section>
+</BaseLayout>

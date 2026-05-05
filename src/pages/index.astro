@@ -58,6 +58,9 @@ const organizationJsonLd = {
       lead="テーマ発表、出演時間、祭りの予定をここに集約します。"
     />
     <UpdateList updates={updates} limit={3} />
+    <div class="section-actions">
+      <a class="button button-secondary" href="/news/">More...</a>
+    </div>
   </section>
 
   <section class="section">
@@ -78,11 +81,11 @@ const organizationJsonLd = {
     <div class="social-gallery-stack">
       <section class="social-gallery-group" aria-labelledby="instagram-gallery-title">
         <h3 id="instagram-gallery-title">Instagram</h3>
-        <GalleryGrid items={instagramGallery} layout="rail" />
+        <GalleryGrid items={instagramGallery} layout="rail" autoInstagram />
       </section>
       <section class="social-gallery-group" aria-labelledby="facebook-gallery-title">
         <h3 id="facebook-gallery-title">Facebook</h3>
-        <GalleryGrid items={facebookGallery} layout="rail" />
+        <GalleryGrid items={facebookGallery} layout="stack" autoFacebook />
       </section>
     </div>
   </section>

@@ -1,0 +1,50 @@
+---
+import Pagination from '@components/Pagination.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import UpdateList from '@components/UpdateList.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getSiteSettings, getUpdates } from '@lib/cms';
+
+export async function getStaticPaths() {
+  const newsPerPage = 5;
+  const updates = await getUpdates();
+  const totalPages = Math.ceil(updates.length / newsPerPage);
+
+  return Array.from({ length: Math.max(totalPages - 1, 0) }, (_, index) => {
+    const page = index + 2;
+    return {
+      params: { page: String(page) },
+      props: { page, totalPages, updates }
+    };
+  });
+}
+
+type Props = {
+  page: number;
+  totalPages: number;
+  updates: Awaited<ReturnType<typeof getUpdates>>;
+};
+
+const site = await getSiteSettings();
+const { page, totalPages, updates } = Astro.props as Props;
+const newsPerPage = 5;
+const pageUpdates = updates.slice((page - 1) * newsPerPage, page * newsPerPage);
+---
+
+<BaseLayout
+  site={site}
+  title={`News ${page} | ${site.name}`}
+  description={`${site.name}の最新情報、出演予定、募集情報の一覧 ${page}ページ目です。`}
+>
+  <section class="page-hero page-hero-teal">
+    <p class="eyebrow">News</p>
+    <h1>News</h1>
+    <p>最新情報、出演予定、メンバー募集のお知らせをまとめています。</p>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Updates" title={`最新情報一覧 ${page}`} />
+    <UpdateList updates={pageUpdates} />
+    <Pagination currentPage={page} totalPages={totalPages} />
+  </section>
+</BaseLayout>

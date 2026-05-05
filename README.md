@@ -35,6 +35,10 @@ cp .env.example .env
 
 ホームのギャラリーは `sourceLabel` ごとに分かれます。Instagram は横スクロールの写真レール、Facebook は同じセクション内の追加枠として表示します。
 
+InstagramとFacebookはNetlify Functions経由で最新投稿へ自動差し替えできます。MetaのAPIを使うため、InstagramアカウントはBusinessまたはCreatorのプロアカウントにし、Netlifyの環境変数に `INSTAGRAM_ACCESS_TOKEN` と `INSTAGRAM_USER_ID` を設定してください。Facebookは `FACEBOOK_PAGE_ID` と `FACEBOOK_PAGE_ACCESS_TOKEN` を設定してください。未設定またはAPI取得に失敗した場合は、`src/data/mock.ts` のローカルギャラリーをそのまま表示します。
+
+`INSTAGRAM_FEED_LIMIT` と `FACEBOOK_FEED_LIMIT` は表示件数です。未設定時は6件、最大12件まで取得します。アクセストークンはブラウザへ出さず、`netlify/functions/` 配下のFunctionsだけで使用します。
+
 ## Commands
 
 ```sh
@@ -44,6 +48,8 @@ pnpm preview
 ```
 
 `MICROCMS_SERVICE_DOMAIN` と `MICROCMS_API_KEY` が未設定の場合は、`src/data/mock.ts` のモックデータで表示します。設定済みの場合、練習日程は `practice-schedules`、最新情報は `latest-news` / `latest-events` / `latest-recruiting` / `latest-reports` から取得します。
+
+Instagramの自動反映には `INSTAGRAM_ACCESS_TOKEN` と `INSTAGRAM_USER_ID`、Facebookの自動反映には `FACEBOOK_PAGE_ID` と `FACEBOOK_PAGE_ACCESS_TOKEN` が必要です。静的な初期表示はローカルデータで生成し、公開後は同一オリジンの `/.netlify/functions/instagram-feed` と `/.netlify/functions/facebook-feed` から最新投稿を取得して置き換えます。
 
 ## Notes
 

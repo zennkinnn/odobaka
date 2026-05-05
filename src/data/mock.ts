@@ -154,5 +154,35 @@ export const gallery: GalleryItem[] = [
     alt: '仲間と集まるチームの雰囲気',
     sourceUrl: 'https://www.instagram.com/odorubaka_tokyo/',
     sourceLabel: 'Instagram'
+  },
+  {
+    id: 'facebook-1',
+    title: 'Practice Report',
+    year: '2026',
+    imageUrl:
+      'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=1200&q=80',
+    alt: '練習後に集まるチームメンバーの雰囲気',
+    sourceUrl: 'https://www.facebook.com/odorubaka.tokyo/',
+    sourceLabel: 'Facebook'
+  },
+  {
+    id: 'facebook-2',
+    title: 'Festival Snapshot',
+    year: '2026',
+    imageUrl:
+      'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80',
+    alt: 'フェスティバル会場の光と観客',
+    sourceUrl: 'https://www.facebook.com/odorubaka.tokyo/',
+    sourceLabel: 'Facebook'
+  },
+  {
+    id: 'facebook-3',
+    title: 'Member Update',
+    year: '2025',
+    imageUrl:
+      'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80',
+    alt: '笑顔で集まるメンバーたち',
+    sourceUrl: 'https://www.facebook.com/odorubaka.tokyo/',
+    sourceLabel: 'Facebook'
   }
 ];

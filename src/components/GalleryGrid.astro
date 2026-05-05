@@ -4,14 +4,26 @@ import type { GalleryItem } from '@data/mock';
 type Props = {
   items: GalleryItem[];
   limit?: number;
-  layout?: 'grid' | 'rail';
+  layout?: 'grid' | 'rail' | 'stack';
+  autoInstagram?: boolean;
+  autoFacebook?: boolean;
 };
 
-const { items, limit, layout = 'grid' } = Astro.props;
+const { items, limit, layout = 'grid', autoInstagram = false, autoFacebook = false } = Astro.props;
 const galleryItems = typeof limit === 'number' ? items.slice(0, limit) : items;
+const feedEndpoint = autoInstagram
+  ? '/.netlify/functions/instagram-feed'
+  : autoFacebook
+    ? '/.netlify/functions/facebook-feed'
+    : undefined;
+const feedLabel = autoInstagram ? 'INSTAGRAM' : autoFacebook ? 'FACEBOOK' : undefined;
 ---
 
-<div class:list={['gallery-grid', layout === 'rail' && 'gallery-rail']}>
+<div
+  class:list={['gallery-grid', layout === 'rail' && 'gallery-rail', layout === 'stack' && 'gallery-stack-scroll']}
+  data-social-feed={feedEndpoint}
+  data-social-label={feedLabel}
+>
   {
     galleryItems.map((item) => {
       const figure = (
@@ -35,3 +47,68 @@ const galleryItems = typeof limit === 'number' ? items.slice(0, limit) : items;
     })
   }
 </div>
+
+{
+  feedEndpoint && (
+    <script is:inline>
+      {`
+        (() => {
+          const feeds = document.querySelectorAll('[data-social-feed]');
+          if (!feeds.length) return;
+
+          const text = (value, fallback = '') => (typeof value === 'string' && value.trim() ? value.trim() : fallback);
+
+          const createCard = (item, label) => {
+            const link = document.createElement('a');
+            link.className = 'gallery-link';
+            link.href = text(item.sourceUrl, text(item.permalink, '#'));
+            link.target = '_blank';
+            link.rel = 'noreferrer';
+
+            const figure = document.createElement('figure');
+            figure.className = 'gallery-item';
+
+            const image = document.createElement('img');
+            image.src = text(item.imageUrl);
+            image.alt = text(item.alt, text(item.title, 'Social post'));
+            image.loading = 'lazy';
+            figure.append(image);
+
+            const caption = document.createElement('figcaption');
+
+            const year = document.createElement('span');
+            year.textContent = text(item.year);
+            caption.append(year, document.createTextNode(text(item.title, label)));
+
+            const source = document.createElement('small');
+            source.textContent = text(item.sourceLabel, label);
+            caption.append(source);
+
+            figure.append(caption);
+            link.append(figure);
+            return link;
+          };
+
+          feeds.forEach((feed) => {
+            const endpoint = feed.dataset.socialFeed;
+            const label = feed.dataset.socialLabel || 'SNS';
+            if (!endpoint || feed.dataset.socialFeedLoaded === 'true') return;
+            feed.dataset.socialFeedLoaded = 'true';
+
+            fetch(endpoint, { headers: { accept: 'application/json' } })
+              .then((response) => (response.ok ? response.json() : null))
+              .then((payload) => {
+                const items = Array.isArray(payload?.items) ? payload.items : [];
+                if (!items.length) return;
+
+                feed.replaceChildren(...items.map((item) => createCard(item, label)));
+              })
+              .catch(() => {
+                // Keep the local fallback gallery when the social API is unavailable.
+              });
+          });
+        })();
+      `}
+    </script>
+  )
+}
