@@ -12,17 +12,8 @@ const { schedules } = Astro.props;
   {
     schedules.map((schedule) => (
       <article class="schedule-row">
-        <div>
-          <time datetime={schedule.date}>{schedule.date}</time>
-          <strong>{schedule.time}</strong>
-        </div>
-        <div>
-          <h3>{schedule.venue}</h3>
-          <p>{schedule.area}</p>
-        </div>
-        <span class={schedule.isTrialOpen ? 'status status-open' : 'status'}>
-          {schedule.isTrialOpen ? '見学可' : '通常練習'}
-        </span>
+        <div class="schedule-content schedule-date" set:html={schedule.dateText || '<p>日程調整中</p>'} />
+        <div class="schedule-content schedule-detail" set:html={schedule.areaText || '<p>詳細は後日公開します。</p>'} />
       </article>
     ))
   }

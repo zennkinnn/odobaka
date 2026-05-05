@@ -16,17 +16,10 @@ const items = typeof limit === 'number' ? updates.slice(0, limit) : updates;
       <article class="update-card">
         <div class="update-meta">
           <time datetime={item.date}>{item.date}</time>
-          <span>{item.category === 'event' ? 'EVENT' : 'NEWS'}</span>
+          <span>{item.categoryLabel}</span>
         </div>
-        <h3><a href={`/news/${item.slug}/`}>{item.title}</a></h3>
+        <h3><a href={`/news/${item.id}/`}>{item.title}</a></h3>
         <p>{item.summary}</p>
-        {item.times && (
-          <ul class="time-list">
-            {item.times.map((time) => (
-              <li>{time}</li>
-            ))}
-          </ul>
-        )}
       </article>
     ))
   }

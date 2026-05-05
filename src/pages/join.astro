@@ -8,7 +8,7 @@ const site = await getSiteSettings();
 const pages = await getPages();
 const schedules = await getPracticeSchedules();
 const join = pages.find((page) => page.slug === 'join');
-const openSchedules = schedules.filter((schedule) => schedule.isTrialOpen).slice(0, 2);
+const openSchedules = schedules.slice(0, 2);
 ---
 
 <BaseLayout

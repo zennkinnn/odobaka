@@ -17,23 +17,21 @@ export type PageContent = {
 
 export type Update = {
   id: string;
-  slug: string;
-  category: 'news' | 'event';
+  category: 'news' | 'event' | 'recruiting';
+  categoryLabel: string;
   title: string;
   date: string;
   summary: string;
   body: string;
-  venue?: string;
-  times?: string[];
+  bodyHtml?: string;
+  imageUrl?: string;
+  imageAlt?: string;
 };
 
 export type PracticeSchedule = {
   id: string;
-  date: string;
-  time: string;
-  venue: string;
-  area: string;
-  isTrialOpen: boolean;
+  dateText: string;
+  areaText: string;
 };
 
 export type GalleryItem = {
@@ -78,8 +76,8 @@ export const pages: PageContent[] = [
 export const updates: Update[] = [
   {
     id: 'theme-2026',
-    slug: 'theme-2026',
     category: 'news',
+    categoryLabel: 'お知らせ',
     title: '2026年テーマ「励舞Rave」に決定',
     date: '2026-04-21',
     summary: '今年のテーマが決定しました。新しい踊りと音で、祭りの場を熱くします。',
@@ -88,20 +86,18 @@ export const updates: Update[] = [
   },
   {
     id: 'kazusa-2026',
-    slug: 'kazusa-2026',
     category: 'event',
+    categoryLabel: '出演',
     title: '第24回かずさ木更津よさこいまつり 出演',
     date: '2026-05-04',
     summary: '木更津舞尊に出演します。東部会場と一番街会場で演舞予定です。',
     body:
-      '第24回かずさ木更津よさこいまつりに参加します。会場でお会いできるのを楽しみにしています。',
-    venue: '木更津市内',
-    times: ['13:32 東部会場 ステージ', '16:27 一番街会場 パレード', '16:41 一番街会場 パレード']
+      '第24回かずさ木更津よさこいまつりに参加します。会場でお会いできるのを楽しみにしています。'
   },
   {
     id: 'trial-open',
-    slug: 'trial-open',
-    category: 'news',
+    category: 'recruiting',
+    categoryLabel: '募集',
     title: 'メンバー見学受付中',
     date: '2026-05-10',
     summary: '練習見学、体験参加を受け付けています。初心者の方も歓迎です。',
@@ -113,27 +109,18 @@ export const updates: Update[] = [
 export const practiceSchedules: PracticeSchedule[] = [
   {
     id: 'practice-1',
-    date: '2026-05-12',
-    time: '19:00-21:30',
-    venue: '都内公共施設',
-    area: '東京都内',
-    isTrialOpen: true
+    dateText: '<p>2026-05-12<br>19:00-21:30</p>',
+    areaText: '<p>都内公共施設<br>東京都内<br>見学可</p>'
   },
   {
     id: 'practice-2',
-    date: '2026-05-19',
-    time: '19:00-21:30',
-    venue: '都内体育館',
-    area: '東京都内',
-    isTrialOpen: true
+    dateText: '<p>2026-05-19<br>19:00-21:30</p>',
+    areaText: '<p>都内体育館<br>東京都内<br>見学可</p>'
   },
   {
     id: 'practice-3',
-    date: '2026-05-26',
-    time: '19:00-21:30',
-    venue: '都内公共施設',
-    area: '東京都内',
-    isTrialOpen: false
+    dateText: '<p>2026-05-26<br>19:00-21:30</p>',
+    areaText: '<p>都内公共施設<br>東京都内<br>通常練習</p>'
   }
 ];
 

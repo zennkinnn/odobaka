@@ -316,9 +316,9 @@ h3 {
 
 .schedule-row {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
   gap: 24px;
-  align-items: center;
+  align-items: start;
   min-height: 104px;
   padding: 20px 24px;
   background: var(--white);
@@ -326,14 +326,26 @@ h3 {
   border-radius: 8px;
 }
 
-.schedule-row time,
-.schedule-row strong {
-  display: block;
+.schedule-content {
+  color: var(--ink-soft);
+  line-height: 1.8;
+}
+
+.schedule-content :first-child {
+  margin-top: 0;
+}
+
+.schedule-content :last-child {
+  margin-bottom: 0;
+}
+
+.schedule-date {
+  color: var(--ink);
   font-weight: 900;
 }
 
-.schedule-row p {
-  margin: 8px 0 0;
+.schedule-content p {
+  margin: 8px 0;
 }
 
 .status {
@@ -479,6 +491,29 @@ h3 {
 .article-lead {
   margin-top: 28px;
   font-weight: 800;
+}
+
+.article-image {
+  width: 100%;
+  max-height: 460px;
+  margin-top: 30px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.article-body {
+  margin-top: 28px;
+  color: var(--ink-soft);
+  font-size: clamp(1.02rem, 1.6vw, 1.18rem);
+  line-height: 1.9;
+}
+
+.article-body :first-child {
+  margin-top: 0;
+}
+
+.article-body :last-child {
+  margin-bottom: 0;
 }
 
 .article-times {

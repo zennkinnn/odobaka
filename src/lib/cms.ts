@@ -1,3 +1,4 @@
+import { createClient, type MicroCMSImage } from 'microcms-js-sdk';
 import {
   gallery,
   pages,
@@ -13,36 +14,86 @@ import {
 
 const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
+const client =
+  serviceDomain && apiKey
+    ? createClient({
+        serviceDomain,
+        apiKey,
+        retry: true
+      })
+    : null;
 
 export const microCmsApis = {
-  practiceSchedules: 'practice-schedules',
-  latestInfo: [
-    'latest-news',
-    'latest-events',
-    'latest-recruiting',
-    'latest-reports'
-  ]
+  blogs: 'blogs',
+  schedules: 'schedules'
 } as const;
 
-type MicroCMSListResponse<T> = {
-  contents: T[];
+type MicroCMSContent<T> = T & {
+  id: string;
 };
 
-async function fetchList<T>(endpoint: string): Promise<T[] | null> {
-  if (!serviceDomain || !apiKey) return null;
+type MicroCMSBlog = {
+  title: string;
+  date: string;
+  category: string | string[];
+  summary: string;
+  body: string;
+  image?: MicroCMSImage;
+};
 
-  const response = await fetch(`https://${serviceDomain}.microcms.io/api/v1/${endpoint}?limit=100`, {
-    headers: {
-      'X-MICROCMS-API-KEY': apiKey
-    }
-  });
+type MicroCMSSchedule = {
+  date_text?: string;
+  area_text?: string;
+};
 
-  if (!response.ok) {
-    throw new Error(`microCMS request failed: ${endpoint}`);
-  }
+async function fetchAll<T>(
+  endpoint: string,
+  queries: Record<string, string | number> = {}
+): Promise<MicroCMSContent<T>[] | null> {
+  if (!client) return null;
 
-  const data = (await response.json()) as MicroCMSListResponse<T>;
-  return data.contents;
+  return client.getAllContents<T>({
+    endpoint,
+    queries
+  }) as Promise<MicroCMSContent<T>[]>;
+}
+
+function getCategoryValues(category: string | string[]): string[] {
+  return Array.isArray(category) ? category : [category];
+}
+
+function toUpdateCategory(category: string | string[]): Update['category'] {
+  const values = getCategoryValues(category);
+  if (values.includes('出演')) return 'event';
+  if (values.includes('募集')) return 'recruiting';
+  return 'news';
+}
+
+function toCategoryLabel(category: string | string[]): string {
+  return getCategoryValues(category).join(' / ');
+}
+
+function toUpdate(content: MicroCMSContent<MicroCMSBlog>): Update {
+  return {
+    id: content.id,
+    category: toUpdateCategory(content.category),
+    categoryLabel: toCategoryLabel(content.category),
+    title: content.title,
+    date: content.date,
+    summary: content.summary,
+    body: content.body,
+    bodyHtml: content.body,
+    imageUrl: content.image?.url,
+    imageAlt: content.title
+  };
+}
+
+function toPracticeSchedule(content: MicroCMSContent<MicroCMSSchedule>): PracticeSchedule {
+  return {
+    id: content.id,
+    dateText: content.date_text ?? '',
+    areaText: content.area_text ?? ''
+  };
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -54,20 +105,17 @@ export async function getPages(): Promise<PageContent[]> {
 }
 
 export async function getUpdates(): Promise<Update[]> {
-  const fetchedUpdates = await Promise.all(
-    microCmsApis.latestInfo.map((endpoint) => fetchList<Update>(endpoint))
-  );
-  const contents = fetchedUpdates.every((items) => items === null)
-    ? updates
-    : fetchedUpdates.flatMap((items) => items ?? []);
+  const contents = await fetchAll<MicroCMSBlog>(microCmsApis.blogs, { orders: '-date' });
+  if (!contents) return [...updates].sort((a, b) => b.date.localeCompare(a.date));
 
-  return [...contents].sort((a, b) => b.date.localeCompare(a.date));
+  return contents.map(toUpdate);
 }
 
 export async function getPracticeSchedules(): Promise<PracticeSchedule[]> {
-  const contents =
-    (await fetchList<PracticeSchedule>(microCmsApis.practiceSchedules)) ?? practiceSchedules;
-  return [...contents].sort((a, b) => a.date.localeCompare(b.date));
+  const contents = await fetchAll<MicroCMSSchedule>(microCmsApis.schedules);
+  if (!contents) return practiceSchedules;
+
+  return contents.map(toPracticeSchedule);
 }
 
 export async function getGallery(): Promise<GalleryItem[]> {
