@@ -1,0 +1,100 @@
+---
+import GalleryGrid from '@components/GalleryGrid.astro';
+import ScheduleList from '@components/ScheduleList.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import UpdateList from '@components/UpdateList.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getGallery, getPages, getPracticeSchedules, getSiteSettings, getUpdates } from '@lib/cms';
+
+const site = await getSiteSettings();
+const pages = await getPages();
+const updates = await getUpdates();
+const schedules = await getPracticeSchedules();
+const gallery = await getGallery();
+const about = pages.find((page) => page.slug === 'about');
+const join = pages.find((page) => page.slug === 'join');
+const instagramGallery = gallery.filter((item) => item.sourceLabel === 'Instagram');
+const facebookGallery = gallery.filter((item) => item.sourceLabel === 'Facebook');
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsOrganization',
+  name: site.name,
+  description: site.description,
+  areaServed: '東京都',
+  email: site.email,
+  sameAs: [site.instagramUrl]
+};
+---
+
+<BaseLayout site={site}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Tokyo Yosakoi Team</p>
+      <h1>{site.name}</h1>
+      <p>{site.tagline}</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/join/">見学・参加する</a>
+        <a class="button button-secondary" href="/schedule/">演舞・練習日程を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-split">
+    <div>
+      <SectionHeading eyebrow="About" title={about?.title ?? '踊るほど、日常が熱くなる。'} />
+    </div>
+    <div class="body-large">
+      <p>{about?.body}</p>
+    </div>
+  </section>
+
+  <section class="section section-band">
+    <SectionHeading
+      eyebrow="News & Events"
+      title="最新情報と出演予定"
+      lead="テーマ発表、出演時間、祭りの予定をここに集約します。"
+    />
+    <UpdateList updates={updates} limit={3} />
+  </section>
+
+  <section class="section">
+    <SectionHeading
+      eyebrow="Practice"
+      title="練習日程"
+      lead="見学できる日を確認して、まずは気軽に練習の空気を見に来てください。"
+    />
+    <ScheduleList schedules={schedules.slice(0, 3)} />
+  </section>
+
+  <section class="section section-gallery">
+    <SectionHeading
+      eyebrow="Gallery"
+      title="祭りの熱量を写真で伝える"
+      lead="演舞の瞬間、祭りの高揚感、チームの表情を写真で届けます。"
+    />
+    <div class="social-gallery-stack">
+      <section class="social-gallery-group" aria-labelledby="instagram-gallery-title">
+        <h3 id="instagram-gallery-title">Instagram</h3>
+        <GalleryGrid items={instagramGallery} layout="rail" />
+      </section>
+      <section class="social-gallery-group" aria-labelledby="facebook-gallery-title">
+        <h3 id="facebook-gallery-title">Facebook</h3>
+        <GalleryGrid items={facebookGallery} layout="rail" />
+      </section>
+    </div>
+  </section>
+
+  <section class="join-cta">
+    <div>
+      <p class="eyebrow">Join Us</p>
+      <h2>{join?.title}</h2>
+      <p>{join?.body}</p>
+    </div>
+    <a class="button button-primary" href={site.joinFormUrl} target="_blank" rel="noreferrer">
+      見学フォームへ
+    </a>
+  </section>
+</BaseLayout>

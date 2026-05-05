@@ -1,0 +1,26 @@
+---
+import GalleryGrid from '@components/GalleryGrid.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getGallery, getSiteSettings } from '@lib/cms';
+
+const site = await getSiteSettings();
+const gallery = await getGallery();
+---
+
+<BaseLayout
+  site={site}
+  title={`Gallery | ${site.name}`}
+  description={`${site.name}の祭りや練習の写真ギャラリーです。`}
+>
+  <section class="page-hero page-hero-gold">
+    <p class="eyebrow">Gallery</p>
+    <h1>Gallery</h1>
+    <p>祭りの熱、仲間の表情、演舞の瞬間を残します。</p>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Photos" title="写真一覧" />
+    <GalleryGrid items={gallery} />
+  </section>
+</BaseLayout>

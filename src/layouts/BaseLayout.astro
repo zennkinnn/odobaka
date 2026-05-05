@@ -1,0 +1,56 @@
+---
+import '@styles/global.css';
+import type { SiteSettings } from '@data/mock';
+
+type Props = {
+  site: SiteSettings;
+  title?: string;
+  description?: string;
+};
+
+const { site, title = site.seoTitle, description = site.seoDescription } = Astro.props;
+const fallbackSite = import.meta.env.SITE_URL ?? 'https://replace-me.example.com';
+const canonical = new URL(Astro.url.pathname, Astro.site ?? fallbackSite);
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label={`${site.name} ホーム`}>
+        <img class="brand-logo" src="/images/main-logo.png" alt="" width="338" height="278" />
+        <span>{site.name}</span>
+      </a>
+      <nav class="site-nav" aria-label="主要ナビゲーション">
+        <a href="/schedule/">演舞・練習日程</a>
+        <a href="/join/">メンバー募集</a>
+        <a href="/gallery/">Gallery</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div>
+        <p class="footer-name">{site.name}</p>
+        <p>{site.description}</p>
+      </div>
+      <div class="footer-links">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={site.instagramUrl} target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+    </footer>
+  </body>
+</html>

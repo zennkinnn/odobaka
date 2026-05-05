@@ -1,0 +1,41 @@
+---
+import ScheduleList from '@components/ScheduleList.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getPages, getPracticeSchedules, getSiteSettings } from '@lib/cms';
+
+const site = await getSiteSettings();
+const pages = await getPages();
+const schedules = await getPracticeSchedules();
+const join = pages.find((page) => page.slug === 'join');
+const openSchedules = schedules.filter((schedule) => schedule.isTrialOpen).slice(0, 2);
+---
+
+<BaseLayout
+  site={site}
+  title={`メンバー募集 | ${site.name}`}
+  description={`${site.name}ではメンバーを募集しています。初心者の方も練習見学から参加できます。`}
+>
+  <section class="page-hero page-hero-teal">
+    <p class="eyebrow">Members Wanted</p>
+    <h1>メンバー募集</h1>
+    <p>{join?.body}</p>
+  </section>
+
+  <section class="section section-split">
+    <SectionHeading eyebrow="First Step" title="まずは見学から。" />
+    <div class="body-large">
+      <p>
+        ダンス経験、よさこい経験は問いません。練習の空気を見て、曲を聴いて、チームの雰囲気を感じてから決められます。
+      </p>
+      <a class="button button-primary" href={site.joinFormUrl} target="_blank" rel="noreferrer">
+        見学フォームへ
+      </a>
+    </div>
+  </section>
+
+  <section class="section section-band">
+    <SectionHeading eyebrow="Open Practice" title="見学できる練習" />
+    <ScheduleList schedules={openSchedules} />
+  </section>
+</BaseLayout>

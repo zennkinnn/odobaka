@@ -1,0 +1,37 @@
+---
+import type { GalleryItem } from '@data/mock';
+
+type Props = {
+  items: GalleryItem[];
+  limit?: number;
+  layout?: 'grid' | 'rail';
+};
+
+const { items, limit, layout = 'grid' } = Astro.props;
+const galleryItems = typeof limit === 'number' ? items.slice(0, limit) : items;
+---
+
+<div class:list={['gallery-grid', layout === 'rail' && 'gallery-rail']}>
+  {
+    galleryItems.map((item) => {
+      const figure = (
+        <figure class="gallery-item">
+          <img src={item.imageUrl} alt={item.alt} loading="lazy" />
+          <figcaption>
+            <span>{item.year}</span>
+            {item.title}
+            {item.sourceLabel && <small>{item.sourceLabel}</small>}
+          </figcaption>
+        </figure>
+      );
+
+      return item.sourceUrl ? (
+        <a class="gallery-link" href={item.sourceUrl} target="_blank" rel="noreferrer">
+          {figure}
+        </a>
+      ) : (
+        figure
+      );
+    })
+  }
+</div>

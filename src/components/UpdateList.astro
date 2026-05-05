@@ -1,0 +1,33 @@
+---
+import type { Update } from '@data/mock';
+
+type Props = {
+  updates: Update[];
+  limit?: number;
+};
+
+const { updates, limit } = Astro.props;
+const items = typeof limit === 'number' ? updates.slice(0, limit) : updates;
+---
+
+<div class="update-list">
+  {
+    items.map((item) => (
+      <article class="update-card">
+        <div class="update-meta">
+          <time datetime={item.date}>{item.date}</time>
+          <span>{item.category === 'event' ? 'EVENT' : 'NEWS'}</span>
+        </div>
+        <h3><a href={`/news/${item.slug}/`}>{item.title}</a></h3>
+        <p>{item.summary}</p>
+        {item.times && (
+          <ul class="time-list">
+            {item.times.map((time) => (
+              <li>{time}</li>
+            ))}
+          </ul>
+        )}
+      </article>
+    ))
+  }
+</div>

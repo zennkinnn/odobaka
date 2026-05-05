@@ -1,0 +1,55 @@
+---
+import ScheduleList from '@components/ScheduleList.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import UpdateList from '@components/UpdateList.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getPracticeSchedules, getSiteSettings, getUpdates } from '@lib/cms';
+
+const site = await getSiteSettings();
+const schedules = await getPracticeSchedules();
+const events = (await getUpdates()).filter((item) => item.category === 'event');
+const siteUrl = Astro.site?.toString() ?? import.meta.env.SITE_URL ?? 'https://replace-me.example.com';
+
+const eventJsonLd = events.map((event) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: event.title,
+  startDate: event.date,
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: {
+    '@type': 'Place',
+    name: event.venue ?? '東京都内'
+  },
+  organizer: {
+    '@type': 'Organization',
+    name: site.name,
+    url: siteUrl
+  },
+  description: event.summary
+}));
+---
+
+<BaseLayout
+  site={site}
+  title={`演舞・練習日程 | ${site.name}`}
+  description={`${site.name}の演舞予定と練習日程を掲載しています。`}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
+
+  <section class="page-hero page-hero-red">
+    <p class="eyebrow">Schedule</p>
+    <h1>演舞・練習日程</h1>
+    <p>見学できる日、出演する祭り、会える場所をまとめています。</p>
+  </section>
+
+  <section class="section section-band">
+    <SectionHeading eyebrow="Events" title="演舞予定" />
+    <UpdateList updates={events} />
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Practice" title="練習日程" />
+    <ScheduleList schedules={schedules} />
+  </section>
+</BaseLayout>

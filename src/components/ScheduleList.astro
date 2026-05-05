@@ -1,0 +1,29 @@
+---
+import type { PracticeSchedule } from '@data/mock';
+
+type Props = {
+  schedules: PracticeSchedule[];
+};
+
+const { schedules } = Astro.props;
+---
+
+<div class="schedule-list">
+  {
+    schedules.map((schedule) => (
+      <article class="schedule-row">
+        <div>
+          <time datetime={schedule.date}>{schedule.date}</time>
+          <strong>{schedule.time}</strong>
+        </div>
+        <div>
+          <h3>{schedule.venue}</h3>
+          <p>{schedule.area}</p>
+        </div>
+        <span class={schedule.isTrialOpen ? 'status status-open' : 'status'}>
+          {schedule.isTrialOpen ? '見学可' : '通常練習'}
+        </span>
+      </article>
+    ))
+  }
+</div>
