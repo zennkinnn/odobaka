@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>踊るBAKA! TOKYO 公式サイト運用提案</title>
+    <style>
+      :root {
+        --ink: #171717;
+        --muted: #5b5b5b;
+        --paper: #fbfaf6;
+        --sheet: #ffffff;
+        --line: #d9d4c8;
+        --red: #d7332a;
+        --gold: #d99b00;
+        --teal: #006d77;
+        --blue: #244f78;
+        --soft-red: #fff1ef;
+        --soft-gold: #fff6d9;
+        --soft-teal: #e9f7f6;
+        --soft-blue: #eef5fb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        color: var(--ink);
+        background: var(--paper);
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.75;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+      }
+
+      main {
+        width: min(100%, 920px);
+        margin: 0 auto;
+        padding: 28px 18px 52px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        overflow-wrap: anywhere;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.18;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 12ch;
+        font-size: 3.1rem;
+        font-weight: 900;
+      }
+
+      h2 {
+        font-size: 1.9rem;
+        font-weight: 850;
+      }
+
+      h3 {
+        font-size: 1.08rem;
+        font-weight: 850;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        color: var(--blue);
+        font-weight: 700;
+        text-underline-offset: 3px;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1.25em;
+      }
+
+      li + li {
+        margin-top: 5px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.94rem;
+      }
+
+      th,
+      td {
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      th {
+        background: #f2eee5;
+        font-weight: 850;
+        text-align: left;
+      }
+
+      .sheet {
+        padding: 42px;
+        background: var(--sheet);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 0 20px 64px rgba(23, 23, 23, 0.1);
+      }
+
+      .sheet + .sheet {
+        margin-top: 22px;
+      }
+
+      .cover {
+        min-height: 760px;
+        display: grid;
+        align-content: space-between;
+        gap: 42px;
+      }
+
+      .cover-top {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 14px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      .kicker {
+        margin-bottom: 12px;
+        color: var(--red);
+        font-size: 0.78rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .subtitle {
+        margin-top: 20px;
+        max-width: 700px;
+        color: var(--muted);
+        font-size: 1.18rem;
+        font-weight: 650;
+      }
+
+      .lead-box {
+        padding: 22px 24px;
+        background: var(--soft-gold);
+        border-left: 7px solid var(--gold);
+        border-radius: 8px;
+        font-size: 1.08rem;
+        font-weight: 750;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 16px;
+        align-items: start;
+        margin-bottom: 24px;
+      }
+
+      .number {
+        display: inline-grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        color: #fff;
+        background: var(--red);
+        border-radius: 50%;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .section-lead {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .panel {
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .panel.red {
+        background: var(--soft-red);
+        border-color: #f0bbb6;
+      }
+
+      .panel.gold {
+        background: var(--soft-gold);
+        border-color: #eed480;
+      }
+
+      .panel.teal {
+        background: var(--soft-teal);
+        border-color: #a7d9d4;
+      }
+
+      .panel.blue {
+        background: var(--soft-blue);
+        border-color: #b8d0e4;
+      }
+
+      .panel h3 {
+        margin-bottom: 8px;
+      }
+
+      .panel p,
+      .panel li {
+        color: var(--muted);
+      }
+
+      .callout {
+        margin-top: 20px;
+        padding: 18px 20px;
+        color: #fff;
+        background: var(--teal);
+        border-radius: 8px;
+        font-weight: 750;
+      }
+
+      .cost-note {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .footer-note {
+        margin-top: 28px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          padding: 14px 10px 30px;
+        }
+
+        .sheet {
+          padding: 26px 18px;
+        }
+
+        .cover {
+          min-height: auto;
+        }
+
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        h2 {
+          font-size: 1.48rem;
+        }
+
+        .section-head,
+        .grid.two,
+        .grid.three {
+          grid-template-columns: 1fr;
+        }
+
+        table {
+          font-size: 0.88rem;
+        }
+      }
+
+      @page {
+        size: A4;
+        margin: 14mm;
+      }
+
+      @media print {
+        html,
+        body {
+          background: #fff;
+        }
+
+        main {
+          width: 100%;
+          padding: 0;
+        }
+
+        .sheet {
+          padding: 0;
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+          break-inside: avoid;
+        }
+
+        .sheet + .sheet {
+          margin-top: 0;
+          break-before: page;
+        }
+
+        .cover {
+          min-height: 250mm;
+        }
+
+        .panel,
+        .lead-box,
+        .callout,
+        table {
+          break-inside: avoid;
+        }
+
+        a {
+          color: var(--ink);
+          text-decoration: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="sheet cover">
+        <div class="cover-top">
+          <span>踊るBAKA! TOKYO 公式サイト運用提案</span>
+          <span>2026年5月8日時点</span>
+        </div>
+
+        <div>
+          <p class="kicker">Website Operation Proposal</p>
+          <h1>続けやすい公式サイトへ。</h1>
+          <p class="subtitle">
+            練習日程、出演情報、メンバー募集を見つけやすく整理し、担当者が無理なく更新できるサイトを作ります。
+          </p>
+        </div>
+
+        <div class="lead-box">
+          提案の結論: まずは無料枠中心で小さく始め、必要な情報だけを管理画面から更新できる形にします。
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="section-head">
+          <span class="number">1</span>
+          <div>
+            <p class="kicker">Why</p>
+            <h2>SNSで流れる情報を、公式サイトに整理します</h2>
+            <p class="section-lead">
+              SNSは熱量を伝える場所。公式サイトは、初めて見る人が必要な情報へ迷わず進む場所です。
+            </p>
+          </div>
+        </div>
+
+        <table aria-label="SNSと公式サイトの役割">
+          <thead>
+            <tr>
+              <th>情報</th>
+              <th>SNSだけの場合</th>
+              <th>公式サイトがある場合</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>練習日程</td>
+              <td>投稿に埋もれやすい。</td>
+              <td>日程ページでまとめて確認できる。</td>
+            </tr>
+            <tr>
+              <td>募集案内</td>
+              <td>参加方法が探しにくい。</td>
+              <td>見学フォームまで案内できる。</td>
+            </tr>
+            <tr>
+              <td>出演情報</td>
+              <td>会場や時間を探し直す必要がある。</td>
+              <td>予定とお知らせを一覧で見せられる。</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="sheet">
+        <div class="section-head">
+          <span class="number">2</span>
+          <div>
+            <p class="kicker">Merits</p>
+            <h2>代表・担当者にとってのメリット</h2>
+            <p class="section-lead">
+              難しい操作を増やさず、更新しやすさと運用コストの低さを優先します。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <article class="panel red">
+            <h3>更新しやすい</h3>
+            <p>ブログ、出演情報、練習日程を管理画面から入力できます。</p>
+          </article>
+          <article class="panel gold">
+            <h3>費用を抑えやすい</h3>
+            <p>まず無料枠中心で開始し、必要になった時だけ有料化を検討します。</p>
+          </article>
+          <article class="panel teal">
+            <h3>引き継ぎやすい</h3>
+            <p>担当者が変わっても迷いにくいよう、更新範囲をシンプルにします。</p>
+          </article>
+        </div>
+
+        <div class="callout">
+          作って終わりではなく、チーム側で情報を出し続けられることを一番大切にします。
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="section-head">
+          <span class="number">3</span>
+          <div>
+            <p class="kicker">Operation</p>
+            <h2>日常更新はこの3つに絞ります</h2>
+            <p class="section-lead">
+              更新する場所を増やしすぎないことで、担当者が変わっても続けやすくします。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <article class="panel blue">
+            <h3>ブログ・お知らせ</h3>
+            <p>テーマ発表、活動報告、募集のお知らせを投稿します。</p>
+          </article>
+          <article class="panel teal">
+            <h3>出演情報</h3>
+            <p>祭り名、日時、会場、演舞予定をまとめます。</p>
+          </article>
+          <article class="panel gold">
+            <h3>練習日程</h3>
+            <p>日付、時間、場所、見学可否を更新します。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="sheet">
+        <div class="section-head">
+          <span class="number">4</span>
+          <div>
+            <p class="kicker">Cost & Handover</p>
+            <h2>低コストで始め、運用しやすい状態を保ちます</h2>
+            <p class="section-lead">
+              初期運用では無料枠に収まる設計を目指し、必要なときだけ見直します。
+            </p>
+          </div>
+        </div>
+
+        <table aria-label="費用と引き継ぎの要点">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>方針</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>サイト公開</td>
+              <td>Netlify Freeの月0ドル枠から開始。アクセス増加時に見直し。</td>
+            </tr>
+            <tr>
+              <td>更新管理</td>
+              <td>microCMS Hobbyの月0円枠から開始。最大5個のAPI内で設計。</td>
+            </tr>
+            <tr>
+              <td>独自ドメイン</td>
+              <td>必要に応じて別途取得。年額費用は取得時に確認。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="cost-note">
+          料金は2026年5月8日時点の公式情報をもとにした目安です。正式運用前に
+          <a href="https://microcms.io/pricing">microCMS料金ページ</a> と
+          <a href="https://www.netlify.com/pricing/">Netlify料金ページ</a> で最新情報を確認します。
+        </p>
+      </section>
+
+      <section class="sheet">
+        <div class="section-head">
+          <span class="number">5</span>
+          <div>
+            <p class="kicker">Summary</p>
+            <h2>公式サイトは、活動を続けやすくする土台です</h2>
+            <p class="section-lead">
+              祭り、練習、募集の情報を整理し、見る人にも運用する人にも分かりやすい入口を作ります。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <article class="panel red">
+            <h3>代表の負担を減らす</h3>
+            <p>必要な情報を公式サイトに集約し、問い合わせ前の迷いを減らします。</p>
+          </article>
+          <article class="panel teal">
+            <h3>チームで運用できる</h3>
+            <p>担当者が変わっても続くように、更新範囲と手順をシンプルにします。</p>
+          </article>
+        </div>
+
+        <p class="footer-note">
+          提案資料: 踊るBAKA! TOKYO 公式サイト運用提案 / 画像不使用 / A4 PDF保存を想定
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
