@@ -4,9 +4,17 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.33.3",
+  "volta": {
+    "node": "24.15.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "yaml": "2.8.4"
+    }
+  },
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build && cp proposal.html dist/proposal.html",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "dependencies": {
